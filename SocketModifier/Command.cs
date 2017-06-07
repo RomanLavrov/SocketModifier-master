@@ -46,7 +46,7 @@ namespace SocketModifier
             TaskDialog.Show("Walls", temp);
         }
 
-        public BoundingBoxIntersectsFilter Filter(Element wall, Document doc)
+        private BoundingBoxIntersectsFilter Filter(Element wall, Document doc)
         {
             BoundingBoxXYZ box = wall.get_BoundingBox(null);
             if (box != null)
@@ -59,7 +59,7 @@ namespace SocketModifier
             return null;
         }
 
-        public List<FamilyInstance> GetCategoryDevices(Document doc, Element wall, BuiltInCategory category)
+        private List<FamilyInstance> GetCategoryDevices(Document doc, Element wall, BuiltInCategory category)
         {
             BoundingBoxIntersectsFilter filter = Filter(wall, doc);
             List<FamilyInstance> list = new List<FamilyInstance>();
@@ -79,7 +79,7 @@ namespace SocketModifier
             return list;
         }
 
-        public List<FamilyInstance> GetDevices(Document doc, Element wall)
+        private List<FamilyInstance> GetDevices(Document doc, Element wall)
         {
             List<FamilyInstance> deviceList = new List<FamilyInstance>();
 
@@ -94,7 +94,7 @@ namespace SocketModifier
             return deviceList;
         }
 
-        public void AddParameterData(Document doc, List<FamilyInstance> devices, TargetWalls wall)
+        private void AddParameterData(Document doc, List<FamilyInstance> devices, TargetWalls wall)
         {
             using (Transaction trans = new Transaction(doc, "Adding Parameter"))
             {
@@ -122,7 +122,7 @@ namespace SocketModifier
             return list;
         }
 
-        public List<TargetWalls> GetAllWalls(List<Document> documents)
+        private List<TargetWalls> GetAllWalls(List<Document> documents)
         {
             List<TargetWalls> list = new List<TargetWalls>();
             foreach (Document doc in documents)
@@ -145,7 +145,7 @@ namespace SocketModifier
             return list;
         }
 
-        public void ChangeParameters(Application app, Document doc)
+        private void ChangeParameters(Application app, Document doc)
         {
             List<TargetWalls> walls = GetAllWalls(GetLinkedDocuments(app));
             foreach (TargetWalls wall in walls)
