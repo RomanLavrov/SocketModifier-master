@@ -59,7 +59,7 @@ namespace SocketModifier
             return null;
         }
 
-        public List<FamilyInstance> GetFireAlarmDevices(Document doc, Element wall)
+        public List<FamilyInstance> GetCategoryDevices(Document doc, Element wall, BuiltInCategory category)
         {
             BoundingBoxIntersectsFilter filter = Filter(wall, doc);
             List<FamilyInstance> list = new List<FamilyInstance>();
@@ -67,117 +67,14 @@ namespace SocketModifier
             {
                 FilteredElementCollector collector = new FilteredElementCollector(doc)
                     .OfClass(typeof(FamilyInstance))
-                    .OfCategory(BuiltInCategory.OST_FireAlarmDevices)
+                    .OfCategory(category)
                     .WherePasses(filter);
-
-                string temp = string.Empty;
+                
                 foreach (FamilyInstance instance in collector)
                 {
                     list.Add(instance);
-                    temp += instance.Id + " " + instance.Name + "\n";
+                    
                 }
-
-               // if (!string.IsNullOrEmpty(temp))
-                  //  TaskDialog.Show("Fire Alarm Devices", temp);
-            }
-           
-
-            return list;
-        }
-
-        public List<FamilyInstance> GetDataDevices(Document doc, Element wall)
-        {
-            BoundingBoxIntersectsFilter filter = Filter(wall, doc);
-            List<FamilyInstance> list = new List<FamilyInstance>();
-
-            if (filter != null)
-            {
-                FilteredElementCollector collector = new FilteredElementCollector(doc)
-                    .OfClass(typeof(FamilyInstance))
-                    .OfCategory(BuiltInCategory.OST_DataDevices)
-                    .WherePasses(filter);
-
-                string temp = string.Empty;
-                foreach (FamilyInstance instance in collector)
-                {
-                    list.Add(instance);
-                    temp += instance.Id + " " + instance.Name + "\n";
-                }
-
-               // if (!string.IsNullOrEmpty(temp))
-                   // TaskDialog.Show("Data Devices", temp);
-            }
-            return list;
-        }
-
-        public List<FamilyInstance> GetLightingDevices(Document doc, Element wall)
-        {
-            BoundingBoxIntersectsFilter filter = Filter(wall, doc);
-            List<FamilyInstance> list = new List<FamilyInstance>();
-            if (filter != null)
-            {
-                FilteredElementCollector collector = new FilteredElementCollector(doc)
-                    .OfClass(typeof(FamilyInstance))
-                    .OfCategory(BuiltInCategory.OST_LightingDevices)
-                    .WherePasses(filter);
-
-                string temp = string.Empty;
-                foreach (FamilyInstance instance in collector)
-                {
-                    list.Add(instance);
-                    temp += instance.Id + " " + instance.Name + "\n";
-                }
-
-               // if (!string.IsNullOrEmpty(temp))
-                   // TaskDialog.Show("Lighting Devices", temp);
-            }
-            return list;
-        }
-
-        public List<FamilyInstance> GetElectricalFixtures(Document doc, Element wall)
-        {
-            BoundingBoxIntersectsFilter filter = Filter(wall, doc);
-            List<FamilyInstance> list = new List<FamilyInstance>();
-            if (filter != null)
-            {
-                FilteredElementCollector collector = new FilteredElementCollector(doc)
-                    .OfClass(typeof(FamilyInstance))
-                    .OfCategory(BuiltInCategory.OST_ElectricalFixtures)
-                    .WherePasses(filter);
-
-                string temp = string.Empty;
-                foreach (FamilyInstance instance in collector)
-                {
-                    list.Add(instance);
-                    temp += instance.Id + " " + instance.Name + "\n";
-                }
-
-               // if (!string.IsNullOrEmpty(temp))
-                   // TaskDialog.Show("Electrical Fixtures", temp);
-            }
-            return list;
-        }
-
-        public List<FamilyInstance> GetTelephoneDevices(Document doc, Element wall)
-        {
-            BoundingBoxIntersectsFilter filter = Filter(wall, doc);
-            List<FamilyInstance> list = new List<FamilyInstance>();
-            if (filter != null)
-            {
-                FilteredElementCollector collector = new FilteredElementCollector(doc)
-                    .OfClass(typeof(FamilyInstance))
-                    .OfCategory(BuiltInCategory.OST_TelephoneDevices)
-                    .WherePasses(filter);
-
-                string temp = string.Empty;
-                foreach (FamilyInstance instance in collector)
-                {
-                    list.Add(instance);
-                    temp += instance.Id + " " + instance.Name + "\n";
-                }
-
-               // if (!string.IsNullOrEmpty(temp))
-                    //TaskDialog.Show("Telephone Devices", temp);
             }
             return list;
         }
@@ -185,11 +82,14 @@ namespace SocketModifier
         public List<FamilyInstance> GetDevices(Document doc, Element wall)
         {
             List<FamilyInstance> deviceList = new List<FamilyInstance>();
-            deviceList.AddRange(GetElectricalFixtures(doc, wall));
-            deviceList.AddRange(GetLightingDevices(doc, wall));
-            deviceList.AddRange(GetDataDevices(doc, wall));
-            deviceList.AddRange(GetTelephoneDevices(doc, wall));
-            deviceList.AddRange(GetFireAlarmDevices(doc, wall));
+
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_ElectricalFixtures));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_ElectricalEquipment));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_LightingDevices));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_DataDevices));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_TelephoneDevices));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_FireAlarmDeviceTags));
+            deviceList.AddRange(GetCategoryDevices(doc, wall, BuiltInCategory.OST_CommunicationDevices));
 
             return deviceList;
         }
@@ -238,7 +138,6 @@ namespace SocketModifier
                         {
                             tWall.material = param.AsString();
                         }
-                      
                     }
                     list.Add(tWall);
                 }
